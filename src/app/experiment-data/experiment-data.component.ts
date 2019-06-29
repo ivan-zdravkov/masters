@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as THREE from 'three';
 import { $ } from 'protractor';
+import { BufferAttribute } from 'three';
 
 @Component({
   selector: 'experiment-data',
@@ -12,13 +13,14 @@ export class ExperimentDataComponent implements OnInit {
   @Input() name: string;
   @Input() type: string;
 
+  width: number = 800;
+  height: number = 600;
   result: any;
   camera: any;
   scene: any;
   renderer: any;
-  geometry: any;
-  material: any;
-  mesh: any;
+
+  skeleton: THREE.Skeleton = null;
 
   constructor(
     private http: HttpClient
@@ -30,24 +32,48 @@ export class ExperimentDataComponent implements OnInit {
         this.result = result;
       });
 
+    /*this.initCanvas();
+    this.initSkeleton();
+    this.initMesh();
+    */
     this.init();
-    //this.animate();
+    this.animate();
   }
- 
+
   init() {
-    this.camera = new THREE.PerspectiveCamera( 70, 800 / 600, 0.01, 10 );
-    this.camera.position.z = 1;
- 
+
+    this.camera = new THREE.PerspectiveCamera( 70, this.width / this.height, 0.1, 20 );
+    this.camera.position.z = 10;
+
     this.scene = new THREE.Scene();
- 
-    this.geometry = new THREE.BoxGeometry( 0.2, 0.2, 0.2 );
-    this.material = new THREE.MeshNormalMaterial();
- 
-    this.mesh = new THREE.Mesh( this.geometry, this.material );
-    this.scene.add( this.mesh );
- 
+
+    var bones = [];
+		var shoulder = new THREE.Bone();
+		var elbow = new THREE.Bone();
+		var hand = new THREE.Bone();
+
+		shoulder.add( elbow );
+		elbow.add( hand );
+
+		bones.push( shoulder );
+		bones.push( elbow );
+		bones.push( hand );
+
+		shoulder.position.y = -5;
+		elbow.position.y = 0;
+		hand.position.y = 5;
+
+		var armSkeleton = new THREE.Skeleton( bones );
+		var helper = new THREE.SkeletonHelper( bones[ 0 ] );
+		
+		var boneContainer = new THREE.Group();
+		boneContainer.add( bones[ 0 ] );
+
+		this.scene.add( helper );
+		this.scene.add( boneContainer );
+
     this.renderer = new THREE.WebGLRenderer( { antialias: true } );
-    this.renderer.setSize( 800, 600 );
+    this.renderer.setSize( this.width, this.height );
 
     setTimeout(x => {
       var element = document.getElementById(this.type);
@@ -56,13 +82,10 @@ export class ExperimentDataComponent implements OnInit {
         element.appendChild( this.renderer.domElement );
     }, 100);
   }
-  
+
   animate() {
-    requestAnimationFrame( this.animate );
- 
-    this.mesh.rotation.x += 0.01;
-    this.mesh.rotation.y += 0.02;
- 
+    requestAnimationFrame( this.animate.bind(this) );
+    
     this.renderer.render( this.scene, this.camera );
   }
 }
