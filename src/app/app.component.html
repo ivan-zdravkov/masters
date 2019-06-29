@@ -4,21 +4,15 @@
   <h1>Bootstrap  tab panel example (using nav-pills)</h1>
 
   <ul class="nav nav-tabs">
-    <li class="nav-item">
-      <a class="nav-link active" href="#photos" role="tab" data-toggle="tab">Photos</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#second" role="tab" data-toggle="tab">Second</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#third" role="tab" data-toggle="tab">Third</a>
+    <li class="nav-item" *ngFor="let name of experimentNames; let i = index;">
+      <a class="nav-link" href="#tab{{i + 1}}" role="tab" data-toggle="tab">{{ i + 1 }}</a>
     </li>
   </ul>
 
-  <div class="tab-content" id="nav-tabContent">
-    <div class="tab-pane fade show active" id="photos" role="tabpanel" aria-labelledby="photos-tab">1</div>
-    <div class="tab-pane fade" id="second" role="tabpanel" aria-labelledby="second-tab">2</div>
-    <div class="tab-pane fade" id="third" role="tabpanel" aria-labelledby="third">3</div>
+  <div class="tab-content">
+    <div class="tab-pane fade" id="tab1" role="tabpanel">1</div>
+    <div class="tab-pane fade" id="tab2" role="tabpanel">2</div>
+    <div class="tab-pane fade" id="tab3" role="tabpanel">3</div>
   </div>
 </div>
 
