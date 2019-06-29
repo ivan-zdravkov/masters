@@ -11,6 +11,7 @@ import { Observable } from 'rxjs';
 })
 export class AppComponent {
   title = 'BodyDataComparator';
+  activeIndex: number;
 
   experimentNames: string[] = [];
 
@@ -24,7 +25,11 @@ export class AppComponent {
       });
   }
 
-  getExperiements(): any {
-    
+  visualize(index: number): boolean {
+    return this.activeIndex === index;
+  }
+
+  set(index: number) {
+    this.activeIndex = index;
   }
 }
