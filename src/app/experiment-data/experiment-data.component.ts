@@ -21,5 +21,10 @@ export class ExperimentDataComponent implements OnInit {
       .subscribe(result => {
         this.result2D = result;
       });
+
+    this.http.get('https://localhost:44376/api/experiments/json/' + this.name + '/3D')
+      .subscribe(result => {
+        this.result3D = result;
+      });
   }
 }
