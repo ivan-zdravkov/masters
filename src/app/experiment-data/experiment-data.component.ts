@@ -8,23 +8,18 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ExperimentDataComponent implements OnInit {
   @Input() name: string;
+  @Input() type: string;
 
-  result2D: any;
-  result3D: any;
+  result: any;
 
   constructor(
     private http: HttpClient
   ) { }
 
   ngOnInit() {
-    this.http.get('https://localhost:44376/api/experiments/json/' + this.name + '/2D')
+    this.http.get('https://localhost:44376/api/experiments/json/' + this.name + '/' + this.type)
       .subscribe(result => {
-        this.result2D = result;
-      });
-
-    this.http.get('https://localhost:44376/api/experiments/json/' + this.name + '/3D')
-      .subscribe(result => {
-        this.result3D = result;
+        this.result = result;
       });
   }
 }

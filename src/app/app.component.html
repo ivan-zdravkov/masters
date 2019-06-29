@@ -9,9 +9,15 @@
 
   <div class="tab-content">
     <div class="tab-pane fade" *ngFor="let name of experimentNames; let i = index;" id="tab{{i + 1}}" role="tabpanel">
-      <experiment-data [name]="name"></experiment-data>
+      <div class="row">
+        <div class="col-6">
+          <experiment-data [name]="name" type="2D"></experiment-data>
+        </div>
+        <div class="col-6">
+          <experiment-data [name]="name" type="3D"></experiment-data>
+        </div>
+      </div>
     </div>
-
   </div>
 </div>
 
