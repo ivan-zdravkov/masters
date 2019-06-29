@@ -25,5 +25,21 @@ namespace Server.Controllers
 
       return new ActionResult<IEnumerable<string>>(experimentNames);
     }
+
+    [HttpGet]
+    [Route("api/experiments/json/{experiment}/{type}")]
+    public ActionResult<string> Json2D(string experiment, string type)
+    {
+      DirectoryInfo jsonDirectory = new DirectoryInfo($"../../ExperimentalData/{experiment}/");
+
+      string fileName = $"Result{type}.json";
+
+      using (StreamReader r = new StreamReader(jsonDirectory + fileName))
+      {
+        string json = r.ReadToEnd();
+
+        return new ActionResult<string>(json);
+      }
+    }
   }
 }

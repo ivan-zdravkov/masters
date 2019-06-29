@@ -45,3 +45,7 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+/Server/Server/bin
+/Server/Server/obj
+/Server/.vs

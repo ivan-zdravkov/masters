@@ -6,10 +6,12 @@ import { AppComponent } from './app.component';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { ExperimentDataComponent } from './experiment-data/experiment-data.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ExperimentDataComponent
   ],
   imports: [
     NgbModule,
