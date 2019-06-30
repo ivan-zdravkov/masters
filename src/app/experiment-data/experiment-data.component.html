@@ -1,6 +1,14 @@
 <div id="{{type}}">
-    <h1 class="text-center">{{ type }}</h1>
+    <h1 class="text-center" *ngIf="type === '2D' && originalImage">VNect (2D) - Original Capture</h1>
+    <h1 class="text-center" *ngIf="type === '3D' && originalImage">Nuitrack (3D) - Original Capture</h1>
     <img class="text-center" [src]="originalImage" [width]="width" [height]="height" *ngIf="originalImage" />
+
+    <h1 class="text-center" *ngIf="type === '2D' && image2D">VNect (2D) - Visual Results</h1>
     <img class="text-center" [src]="image2D" [width]="width" [height]="height" *ngIf="type === '2D' && image2D" />
+
+    <h1 class="text-center" *ngIf="type === '3D' && image3D">Nuitrack (3D) - Visual Results</h1>
     <img class="text-center" [src]="image3D" [width]="width" [height]="height" *ngIf="type === '3D' && image3D" />
+
+    <h1 class="text-center" *ngIf="type === '2D'">VNect (2D) - JSON Results</h1>
+    <h1 class="text-center" *ngIf="type === '3D'">Nuitrack (3D) - JSON Results</h1>
 </div>

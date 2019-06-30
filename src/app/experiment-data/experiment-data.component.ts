@@ -86,8 +86,14 @@ export class ExperimentDataComponent implements OnInit {
     var minZ: number = this.getMinZ(this.result);
     var maxZ: number = this.getMaxZ(this.result);
 
-    this.camera = new THREE.PerspectiveCamera(110, this.width / this.height, minZ, maxZ);
-    this.camera.position.z = 2000;
+    maxZ = this.type === "2D" ? maxZ : maxZ * 10;
+    var cameraY = this.type === "2D" ? 0 : -minY * 2;
+    var cameraZ = this.type === "2D" ? maxZ * 5 : maxZ;
+    var fov = this.type === "2D" ? 120 : 30;
+
+    this.camera = new THREE.PerspectiveCamera(fov, this.width / this.height, minZ, maxZ);
+    this.camera.position.y = cameraY;
+    this.camera.position.z = cameraZ;
 
     this.scene = new THREE.Scene();
   }
@@ -205,7 +211,7 @@ export class ExperimentDataComponent implements OnInit {
     
     if (joint) {
       threeJoint.position.x = joint.Location.X;
-      threeJoint.position.y = -joint.Location.Y;
+      threeJoint.position.y = this.type === "2D" ? -joint.Location.Y : joint.Location.Y;
       threeJoint.position.z = joint.Location.Z;
     }
     else {
@@ -251,7 +257,7 @@ export class ExperimentDataComponent implements OnInit {
 
     result.forEach(f => {
       f.Skeleton.Joints.forEach(j => {
-        if (j.Location.X < min)
+        if (j.Location.X < min && j.Location.X !== 0)
           min = j.Location.X;
       });
     });
@@ -277,7 +283,7 @@ export class ExperimentDataComponent implements OnInit {
 
     result.forEach(f => {
       f.Skeleton.Joints.forEach(j => {
-        if (j.Location.Y < min)
+        if (j.Location.Y < min && j.Location.Y !== 0)
           min = j.Location.Y;
       });
     });
@@ -303,7 +309,7 @@ export class ExperimentDataComponent implements OnInit {
 
     result.forEach(f => {
       f.Skeleton.Joints.forEach(j => {
-        if (j.Location.Z < min)
+        if (j.Location.Z < min && j.Location.Z !== 0)
           min = j.Location.Z;
       });
     });
