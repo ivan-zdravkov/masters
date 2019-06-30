@@ -64,18 +64,22 @@ namespace Server.Controllers
 
     [HttpGet]
     [Route("api/experiments/images/{experiment}/{type}")]
-    public ActionResult<string> Images(string experiment, string type)
+    public ActionResult<IEnumerable<string>> Images(string experiment, string type)
     {
-      DirectoryInfo jsonDirectory = new DirectoryInfo($"../../ExperimentalData/{experiment}/{type}");
+      DirectoryInfo directory = new DirectoryInfo($"../../ExperimentalData/{experiment}/{type}/");
 
-      string fileName = $"Result{type}.json";
+      string[] filePaths = Directory.GetFiles(directory.FullName, "*.jpeg");
 
-      using (StreamReader r = new StreamReader(jsonDirectory + fileName))
+      List<string> results = new List<string>();
+
+      foreach (string filePath in filePaths)
       {
-        string json = r.ReadToEnd();
+        Byte[] bytes = System.IO.File.ReadAllBytes(filePath);
 
-        return new ActionResult<string>(json);
+        results.Add(Convert.ToBase64String(bytes));
       }
+
+      return results;
     }
   }
 }

@@ -1,4 +1,6 @@
 <div id="{{type}}">
     <h1 class="text-center">{{ type }}</h1>
-    <img class="text-center" [src]="currentImage" [width]="width" [height]="height" />
+    <img class="text-center" [src]="originalImage" [width]="width" [height]="height" *ngIf="originalImage" />
+    <img class="text-center" [src]="image2D" [width]="width" [height]="height" *ngIf="type === '2D' && image2D" />
+    <img class="text-center" [src]="image3D" [width]="width" [height]="height" *ngIf="type === '3D' && image3D" />
 </div>

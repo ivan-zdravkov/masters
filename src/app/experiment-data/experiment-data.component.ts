@@ -23,6 +23,8 @@ export class ExperimentDataComponent implements OnInit {
 
   result: Frame[];
   imageResult: any;
+  imageResult2D: any;
+  imageResult3D: any;
 
   scene: any;
   camera: THREE.PerspectiveCamera;
@@ -31,7 +33,9 @@ export class ExperimentDataComponent implements OnInit {
   skeleton: THREE.Skeleton = null;
 
   currentFrame: number = 0;
-  currentImage: SafeResourceUrl;
+  originalImage: SafeResourceUrl;
+  image2D: SafeResourceUrl;
+  image3D: SafeResourceUrl;
 
   constructor(
     private http: HttpClient, 
@@ -44,6 +48,20 @@ export class ExperimentDataComponent implements OnInit {
         this.imageResult = result;
 
         this.updateImage(0);
+      });
+
+    this.http.get('https://localhost:44376/api/experiments/images/' + this.name + '/' + this.type)
+      .subscribe(result => {
+        if (this.type === "2D") {
+          this.imageResult2D = result;
+
+          this.updateImage2D(0);
+        }
+        else {
+          this.imageResult3D = result;
+
+          this.updateImage3D(0);
+        }
       });
 
     this.http.get('https://localhost:44376/api/experiments/json/' + this.name + '/' + this.type)
@@ -144,7 +162,15 @@ export class ExperimentDataComponent implements OnInit {
   }
 
   updateImage(frameIndex: number): any {
-    this.currentImage = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64, ' + this.imageResult[frameIndex]);
+    this.originalImage = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64, ' + this.imageResult[frameIndex]);
+  }
+
+  updateImage2D(frameIndex: number): any {
+    this.image2D = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64, ' + this.imageResult2D[frameIndex]);
+  }
+
+  updateImage3D(frameIndex: number): any {
+    this.image3D = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64, ' + this.imageResult3D[frameIndex]);
   }
 
   updateSkeleton(frame: Frame): any {
@@ -198,6 +224,12 @@ export class ExperimentDataComponent implements OnInit {
 
       this.updateSkeleton(this.result[this.currentFrame]);
       this.updateImage(this.currentFrame);
+
+      if (this.type === "2D")
+        this.updateImage2D(this.currentFrame);
+
+      if (this.type === "3D")
+        this.updateImage3D(this.currentFrame);
 
       this.renderer.render( this.scene, this.camera );
     }, 50);
