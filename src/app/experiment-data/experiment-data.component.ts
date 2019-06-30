@@ -316,8 +316,8 @@ export class ExperimentDataComponent implements OnInit {
 
     result.forEach(f => {
       f.Skeleton.Joints.forEach(j => {
-        if (j.Location.Y > max)
-          max = j.Location.Y;
+        if (j.Location.Z > max)
+          max = j.Location.Z;
       });
     });
 
