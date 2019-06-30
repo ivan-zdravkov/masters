@@ -162,15 +162,18 @@ export class ExperimentDataComponent implements OnInit {
   }
 
   updateImage(frameIndex: number): any {
-    this.originalImage = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64, ' + this.imageResult[frameIndex]);
+    if (this.imageResult)
+      this.originalImage = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64, ' + this.imageResult[frameIndex]);
   }
 
   updateImage2D(frameIndex: number): any {
-    this.image2D = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64, ' + this.imageResult2D[frameIndex]);
+    if (this.imageResult2D)
+      this.image2D = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64, ' + this.imageResult2D[frameIndex]);
   }
 
   updateImage3D(frameIndex: number): any {
-    this.image3D = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64, ' + this.imageResult3D[frameIndex]);
+    if (this.imageResult3D)
+      this.image3D = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64, ' + this.imageResult3D[frameIndex]);
   }
 
   updateSkeleton(frame: Frame): any {
