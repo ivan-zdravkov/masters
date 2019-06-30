@@ -27,6 +27,8 @@ export class ExperimentDataComponent implements OnInit {
 
   skeleton: THREE.Skeleton = null;
 
+  currentFrame: number = 0;
+
   constructor(
     private http: HttpClient
   ) { }
@@ -38,15 +40,24 @@ export class ExperimentDataComponent implements OnInit {
 
         this.initScene();
         this.initSkeleton();
-        this.updateSkeleton(this.result[0]);
+        this.updateSkeleton(this.result[this.currentFrame]);
         this.renderScene();
         this.animate();
       });
   }
 
   initScene() {
-    this.camera = new THREE.PerspectiveCamera( 70, this.width / this.height, 0.1, 1000 );
-    this.camera.position.z = 1000;
+    var minX: number = this.getMinX(this.result);
+    var maxX: number = this.getMaxX(this.result);
+
+    var minY: number = this.getMinY(this.result);
+    var maxY: number = this.getMaxY(this.result);
+
+    var minZ: number = this.getMinZ(this.result);
+    var maxZ: number = this.getMaxZ(this.result);
+
+    this.camera = new THREE.PerspectiveCamera( 110, this.width / this.height, minZ, maxZ );
+    this.camera.position.z = 2000;
 
     this.scene = new THREE.Scene();
   }
@@ -79,13 +90,13 @@ export class ExperimentDataComponent implements OnInit {
     this.connect(bones, JointType.Torso, JointType.Neck);
     this.connect(bones, JointType.Neck, JointType.Head);
     
-    this.connect(bones, JointType.Torso, JointType.LeftCollar);
+    this.connect(bones, JointType.Neck, JointType.LeftCollar);
     this.connect(bones, JointType.LeftCollar, JointType.LeftShoulder);
     this.connect(bones, JointType.LeftShoulder, JointType.LeftElbow);
     this.connect(bones, JointType.LeftElbow, JointType.LeftWrist);
     this.connect(bones, JointType.LeftWrist, JointType.LeftHand);
 
-    this.connect(bones, JointType.Torso, JointType.RightCollar);
+    this.connect(bones, JointType.Neck, JointType.RightCollar);
     this.connect(bones, JointType.RightCollar, JointType.RightShoulder);
     this.connect(bones, JointType.RightShoulder, JointType.RightElbow);
     this.connect(bones, JointType.RightElbow, JointType.RightWrist);
@@ -149,7 +160,7 @@ export class ExperimentDataComponent implements OnInit {
     
     if (joint) {
       threeJoint.position.x = joint.Location.X;
-      threeJoint.position.y = joint.Location.Y;
+      threeJoint.position.y = -joint.Location.Y;
       threeJoint.position.z = joint.Location.Z;
     }
     else {
@@ -160,10 +171,19 @@ export class ExperimentDataComponent implements OnInit {
   }
 
   animate() {
-    requestAnimationFrame( this.animate.bind(this) );
-    var a = this.scene;
+    setTimeout(() => {
+      requestAnimationFrame( this.animate.bind(this) );
 
-    this.renderer.render( this.scene, this.camera );
+      var a = this.scene;
+
+      this.currentFrame + 1 < this.result.length ? 
+        this.currentFrame++ : 
+        this.currentFrame = 0;
+
+      this.updateSkeleton(this.result[this.currentFrame]);
+
+      this.renderer.render( this.scene, this.camera );
+    }, 50);
   }
 
   getBone(bones: ThreeJoint[], jointType: JointType) {
@@ -172,5 +192,83 @@ export class ExperimentDataComponent implements OnInit {
 
   connect(bones: ThreeJoint[], root: JointType, leaf: JointType): any {
     this.getBone(bones, root).add(this.getBone(bones, leaf));
+  }
+
+  getMinX(result: Frame[]): number {
+    var min = Number.MAX_SAFE_INTEGER;
+
+    result.forEach(f => {
+      f.Skeleton.Joints.forEach(j => {
+        if (j.Location.X < min)
+          min = j.Location.X;
+      });
+    });
+
+    return min;
+  }
+
+  getMaxX(result: Frame[]): number {
+    var max = Number.MIN_SAFE_INTEGER;
+
+    result.forEach(f => {
+      f.Skeleton.Joints.forEach(j => {
+        if (j.Location.X > max)
+          max = j.Location.X;
+      });
+    });
+
+    return max;
+  }
+
+  getMinY(result: Frame[]): number {
+    var min = Number.MAX_SAFE_INTEGER;
+
+    result.forEach(f => {
+      f.Skeleton.Joints.forEach(j => {
+        if (j.Location.Y < min)
+          min = j.Location.Y;
+      });
+    });
+
+    return min;
+  }
+
+  getMaxY(result: Frame[]): number {
+    var max = Number.MIN_SAFE_INTEGER;
+
+    result.forEach(f => {
+      f.Skeleton.Joints.forEach(j => {
+        if (j.Location.Y > max)
+          max = j.Location.Y;
+      });
+    });
+
+    return max;
+  }
+
+  getMinZ(result: Frame[]): number {
+    var min = Number.MAX_SAFE_INTEGER;
+
+    result.forEach(f => {
+      f.Skeleton.Joints.forEach(j => {
+        if (j.Location.Z < min)
+          min = j.Location.Z;
+      });
+    });
+
+    return min;
+  }
+
+  getMaxZ(result: Frame[]): number {
+    var max = Number.MIN_SAFE_INTEGER;
+
+    result.forEach(f => {
+      f.Skeleton.Joints.forEach(j => {
+        if (j.Location.Y > max)
+          max = j.Location.Y;
+      });
+    });
+
+    return max;
   }
 }
