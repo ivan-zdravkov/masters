@@ -1,6 +1,5 @@
-canvas {
-    margin-left: 20px;
-    margin-right: 20px;
+canvas, img {
+    margin: 20px;
 }
 
 .container {

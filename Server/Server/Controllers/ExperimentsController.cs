@@ -28,9 +28,45 @@ namespace Server.Controllers
 
     [HttpGet]
     [Route("api/experiments/json/{experiment}/{type}")]
-    public ActionResult<string> Json2D(string experiment, string type)
+    public ActionResult<string> Json(string experiment, string type)
     {
       DirectoryInfo jsonDirectory = new DirectoryInfo($"../../ExperimentalData/{experiment}/");
+
+      string fileName = $"Result{type}.json";
+
+      using (StreamReader r = new StreamReader(jsonDirectory + fileName))
+      {
+        string json = r.ReadToEnd();
+
+        return new ActionResult<string>(json);
+      }
+    }
+
+    [HttpGet]
+    [Route("api/experiments/images/{experiment}")]
+    public ActionResult<IEnumerable<string>> Images(string experiment)
+    {
+      DirectoryInfo directory = new DirectoryInfo($"../../ExperimentalData/{experiment}/");
+
+      string[] filePaths = Directory.GetFiles(directory.FullName, "*.jpeg");
+
+      List<string> results = new List<string>();
+
+      foreach (string filePath in filePaths)
+      {
+        Byte[] bytes = System.IO.File.ReadAllBytes(filePath);
+
+        results.Add(Convert.ToBase64String(bytes));
+      }
+
+      return results;
+    }
+
+    [HttpGet]
+    [Route("api/experiments/images/{experiment}/{type}")]
+    public ActionResult<string> Images(string experiment, string type)
+    {
+      DirectoryInfo jsonDirectory = new DirectoryInfo($"../../ExperimentalData/{experiment}/{type}");
 
       string fileName = $"Result{type}.json";
 

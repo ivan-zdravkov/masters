@@ -7,6 +7,7 @@ import { JointType } from '../enums/joint-type.enum';
 import { ThreeJoint } from '../models/three-joint.model';
 import { Frame } from '../models/frame.model';
 import { Joint } from '../models/joint.model';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'experiment-data',
@@ -19,7 +20,9 @@ export class ExperimentDataComponent implements OnInit {
 
   width: number = 800;
   height: number = 600;
+
   result: Frame[];
+  imageResult: any;
 
   scene: any;
   camera: THREE.PerspectiveCamera;
@@ -28,12 +31,21 @@ export class ExperimentDataComponent implements OnInit {
   skeleton: THREE.Skeleton = null;
 
   currentFrame: number = 0;
+  currentImage: SafeResourceUrl;
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient, 
+    private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
+    this.http.get('https://localhost:44376/api/experiments/images/' + this.name)
+      .subscribe(result => {
+        this.imageResult = result;
+
+        this.updateImage(0);
+      });
+
     this.http.get('https://localhost:44376/api/experiments/json/' + this.name + '/' + this.type)
       .subscribe(result => {
         this.result = result as Frame[];
@@ -56,7 +68,7 @@ export class ExperimentDataComponent implements OnInit {
     var minZ: number = this.getMinZ(this.result);
     var maxZ: number = this.getMaxZ(this.result);
 
-    this.camera = new THREE.PerspectiveCamera( 110, this.width / this.height, minZ, maxZ );
+    this.camera = new THREE.PerspectiveCamera(110, this.width / this.height, minZ, maxZ);
     this.camera.position.z = 2000;
 
     this.scene = new THREE.Scene();
@@ -131,6 +143,10 @@ export class ExperimentDataComponent implements OnInit {
     }, 100);
   }
 
+  updateImage(frameIndex: number): any {
+    this.currentImage = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64, ' + this.imageResult[frameIndex]);
+  }
+
   updateSkeleton(frame: Frame): any {
     this.updateBone(frame, JointType.Head); 
     this.updateBone(frame, JointType.Neck);
@@ -181,6 +197,7 @@ export class ExperimentDataComponent implements OnInit {
         this.currentFrame = 0;
 
       this.updateSkeleton(this.result[this.currentFrame]);
+      this.updateImage(this.currentFrame);
 
       this.renderer.render( this.scene, this.camera );
     }, 50);
