@@ -3,6 +3,7 @@ declare var require: any;
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http'; 
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +20,7 @@ export class AppComponent {
     private http: HttpClient
   ) {
 
-    this.http.get('https://localhost:44376/api/experiments/names')
+    this.http.get(environment.baseUrl + '/api/experiments/names')
       .subscribe((x: string[]) => {
         this.experimentNames = x;
       });

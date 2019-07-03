@@ -8,6 +8,7 @@ import { ThreeJoint } from '../models/three-joint.model';
 import { Frame } from '../models/frame.model';
 import { Joint } from '../models/joint.model';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'experiment-data',
@@ -43,14 +44,14 @@ export class ExperimentDataComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.http.get('https://localhost:44376/api/experiments/images/' + this.name)
+    this.http.get(environment.baseUrl + '/api/experiments/images/' + this.name)
       .subscribe(result => {
         this.imageResult = result;
 
         this.updateImage(0);
       });
 
-    this.http.get('https://localhost:44376/api/experiments/images/' + this.name + '/' + this.type)
+    this.http.get(environment.baseUrl + '/api/experiments/images/' + this.name + '/' + this.type)
       .subscribe(result => {
         if (this.type === "2D") {
           this.imageResult2D = result;
@@ -64,7 +65,7 @@ export class ExperimentDataComponent implements OnInit {
         }
       });
 
-    this.http.get('https://localhost:44376/api/experiments/json/' + this.name + '/' + this.type)
+    this.http.get(environment.baseUrl + '/api/experiments/json/' + this.name + '/' + this.type)
       .subscribe(result => {
         this.result = result as Frame[];
 
