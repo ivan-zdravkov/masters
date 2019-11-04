@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  baseUrl: 'http://mastersapi.zdravkov.eu'
+  baseUrl: 'https://api.bodydatacomparator.zdravkov.eu'
 };

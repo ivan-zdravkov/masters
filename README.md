@@ -1,27 +1,17 @@
-# BodyDataComparator
+# Ivan Zdravkov Master's Thesis - Comparing 2D and 3D methods for 3D skeletal model mapping #
+The master's degree is a result of an 8 month research in the [Ishikawa Senoo Laboratory](http://www.k2.t.u-tokyo.ac.jp/) of the [Tokyo University](https://www.u-tokyo.ac.jp/en) in Japan.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.0.3.
+* The full graduation thesis in bulgarian can be downloaded here: [Дипломна работа магистър - Иван Здравков.docx](https://bitbucket.org/i-z/body-data-comparator/src/master/)
+* Comparison [Results](https://bodydatacomparator.zdravkov.eu)
 
-## Development server
+## Formulation of the problem
+* The task is to compare the results of a 2D and 3D methods for 3D skeletal model mapping.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Architecture
+* Result showcase: An [Angular](https://angular.io/) Application and a simple .NET Core Server to serve the result data sets.
+* Data gathering: A C# and a MATLAB applications using the [Nuitrack SDK](https://nuitrack.com/) and the [VNect](http://gvv.mpi-inf.mpg.de/projects/VNect/) respectively, owned by the Ishikawa Senoo Laboratory.
 
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+## Used Technologies
+* Angular
+* HTML, CSS, JS
+* .NET Core
