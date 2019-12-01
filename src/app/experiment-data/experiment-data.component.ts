@@ -179,17 +179,17 @@ export class ExperimentDataComponent implements OnInit {
   }
 
   updateImage(frameIndex: number): any {
-    if (this.imageResult)
+    if (this && this.imageResult && this.imageResult.length > 0)
       this.originalImage = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64, ' + this.imageResult[frameIndex]);
   }
 
   updateImage2D(frameIndex: number): any {
-    if (this.imageResult2D)
+    if (this && this.imageResult2D && this.imageResult2D.length > 0)
       this.image2D = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64, ' + this.imageResult2D[frameIndex]);
   }
 
   updateImage3D(frameIndex: number): any {
-    if (this.imageResult3D)
+    if (this && this.imageResult3D && this.imageResult3D.length > 0)
       this.image3D = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64, ' + this.imageResult3D[frameIndex]);
   }
 
