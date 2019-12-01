@@ -7,10 +7,13 @@ The master's degree is a result of an 8 month research in the [Ishikawa Senoo La
 * The task is to compare the results of a 2D and 3D methods for 3D skeletal model mapping.
 
 ## Architecture
-* Result showcase: An [Angular](https://angular.io/) Application and a simple .NET Core Server to serve the result data sets.
+* Result showcase: An [Angular](https://angular.io/) application, querying the zipped images from the server to show the results.
 * Data gathering: A C# and a MATLAB applications using the [Nuitrack SDK](https://nuitrack.com/) and the [VNect](http://gvv.mpi-inf.mpg.de/projects/VNect/) respectively, owned by the Ishikawa Senoo Laboratory.
 
 ## Used Technologies
 * Angular
 * HTML, CSS, JS
 * .NET Core
+
+## Demo
+[https://bodydata.zdravkov.eu/](https://bodydata.zdravkov.eu/)
