@@ -9,6 +9,7 @@ import { Frame } from '../models/frame.model';
 import { Joint } from '../models/joint.model';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { environment } from 'src/environments/environment.prod';
+import * as JSZip from 'jszip';
 
 @Component({
   selector: 'experiment-data',
@@ -23,9 +24,9 @@ export class ExperimentDataComponent implements OnInit {
   height: number = 600;
 
   result: Frame[];
-  imageResult: any;
-  imageResult2D: any;
-  imageResult3D: any;
+  imageResult: string[] = [];
+  imageResult2D: string[] = [];
+  imageResult3D: string[] = [];
 
   scene: any;
   camera: THREE.PerspectiveCamera;
@@ -46,23 +47,15 @@ export class ExperimentDataComponent implements OnInit {
   ngOnInit() {
     this.http.get(`${environment.baseUrl}/${this.name}/Original.zip`, { responseType: 'arraybuffer'})
       .subscribe(result => {
-        this.imageResult = result;
-
-        this.updateImage(0);
+        this.decompressImages(result, this.imageResult, this.updateImage);
       });
 
     this.http.get(`${environment.baseUrl}/${this.name}/${this.type}.zip`, { responseType: 'arraybuffer'})
       .subscribe(result => {
-        if (this.type === "2D") {
-          this.imageResult2D = result;
-
-          this.updateImage2D(0);
-        }
-        else {
-          this.imageResult3D = result;
-
-          this.updateImage3D(0);
-        }
+        if (this.type === "2D")
+          this.decompressImages(result, this.imageResult2D, this.updateImage2D);
+        else if (this.type === "3D")
+          this.decompressImages(result, this.imageResult3D, this.updateImage3D);
       });
 
     this.http.get(`${environment.baseUrl}/${this.name}/Result${this.type}.json`)
@@ -74,6 +67,23 @@ export class ExperimentDataComponent implements OnInit {
         this.updateSkeleton(this.result[this.currentFrame]);
         this.renderScene();
         this.animate();
+      });
+  }
+
+  decompressImages(result: any, imageResult: string[], startPlayback: Function) {
+    let zip = new JSZip();
+
+    zip.loadAsync(result)
+      .then(function(unzipped) {
+        for(var fileName in unzipped.files) {
+          unzipped.files[fileName]
+            .async("base64")
+            .then(function success(imageBase64) {
+              imageResult.push(imageBase64);
+            });
+        }
+
+        startPlayback(0);
       });
   }
 
@@ -170,17 +180,17 @@ export class ExperimentDataComponent implements OnInit {
 
   updateImage(frameIndex: number): any {
     if (this.imageResult)
-      this.originalImage = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64, ' + this.imageResult[frameIndex]);
+      this.originalImage = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64, ' + this.imageResult[frameIndex]);
   }
 
   updateImage2D(frameIndex: number): any {
     if (this.imageResult2D)
-      this.image2D = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64, ' + this.imageResult2D[frameIndex]);
+      this.image2D = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64, ' + this.imageResult2D[frameIndex]);
   }
 
   updateImage3D(frameIndex: number): any {
     if (this.imageResult3D)
-      this.image3D = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64, ' + this.imageResult3D[frameIndex]);
+      this.image3D = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64, ' + this.imageResult3D[frameIndex]);
   }
 
   updateSkeleton(frame: Frame): any {
