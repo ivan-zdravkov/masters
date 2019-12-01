@@ -44,14 +44,14 @@ export class ExperimentDataComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.http.get(environment.baseUrl + '/api/experiments/images/' + this.name)
+    this.http.get(`${environment.baseUrl}/${this.name}/Original.zip`, { responseType: 'arraybuffer'})
       .subscribe(result => {
         this.imageResult = result;
 
         this.updateImage(0);
       });
 
-    this.http.get(environment.baseUrl + '/api/experiments/images/' + this.name + '/' + this.type)
+    this.http.get(`${environment.baseUrl}/${this.name}/${this.type}.zip`, { responseType: 'arraybuffer'})
       .subscribe(result => {
         if (this.type === "2D") {
           this.imageResult2D = result;
@@ -65,7 +65,7 @@ export class ExperimentDataComponent implements OnInit {
         }
       });
 
-    this.http.get(environment.baseUrl + '/api/experiments/json/' + this.name + '/' + this.type)
+    this.http.get(`${environment.baseUrl}/${this.name}/Result${this.type}.json`)
       .subscribe(result => {
         this.result = result as Frame[];
 

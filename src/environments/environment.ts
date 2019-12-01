@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'https://localhost:44376'
+  baseUrl: 'https://bodydata.zdravkov.eu/ExperimentalData'
 };
 
 /*
