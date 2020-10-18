@@ -16,4 +16,4 @@ The master's degree is a result of an 8 month research in the [Ishikawa Senoo La
 * .NET Core
 
 ## Demo
-[https://bodydata.zdravkov.eu/](https://bodydata.zdravkov.eu/)
+[https://bodydata.zdravkov.dev/](https://bodydata.zdravkov.dev/)
